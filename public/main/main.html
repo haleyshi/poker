@@ -1,75 +1,75 @@
 <div class="jumbotron">
-  <h3><b>{{mynickname}}</b> - {{roomname}} - {{user.score}}</h3>
-  <div class="col-md-2">
-    <button type="button"
-                 class="btn btn-default"
-                 ng-click="joinPrivate()">Ready</button>
-  </div>
-    <div class="col-md-2">
-      <button type="button"
-                   class="btn btn-default"
-                   ng-click="groupPm()">Cancel</button>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <caption>祝好运，<b>{{mynickname}}！</b></caption>
+            <thead>
+                <tr>
+                    <th><span class="glyphicon glyphicon-user">&nbsp;昵称</span></th>
+                    <th><span class="glyphicon glyphicon-star">&nbsp;战绩</th>
+                    <th><span class="glyphicon glyphicon-heart">&nbsp;状态</th>
+                    <th><span class="glyphicon glyphicon-euro">&nbsp;下注</span></th>
+                    <th><span class="glyphicon glyphicon-tags">&nbsp;卡牌</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="user in users | orderBy:-score">
+                    <td>{{user.nickname}}</td>
+                    <td>{{user.score}}</td>
+                    <td>{{user.status}}</td>
+                    <td>{{user.stake}}</td>
+                    <td>{{user.cards}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <br>
 <div class="row">
-  <div class="col-md-2">
-    <small class="marker">Players</small>
-    <ul class="list-unstyled">
-      <li class="user"
-           ng-repeat="user in users track by $index">
-        <span class='label btn-mini label-default userlabel'>
-          <i class='fa fa-user'></i>
-            {{user.nickname}}
-        </span>
-        &nbsp;
-        <a href="#" ng-click="sendLike(user)">
-        <i class="fa fa-thumbs-up"></i>
-        </a>
-        </li>
-      </ul>
+    <div class="col-md-6">
+        <form ng-submit='sendCtrlMessage()'>
+            <div class='input-group'>
+                <select class="input-sm form-control" ng-model="ctrlmessage" placeholder="选择操作……">
+                    <option value="1">下注+1</option>
+                    <option value="2">下注+2</option>
+                    <option value="5">下注+5</option>
+                    <option value="10">下注+10</option>
+                    <option value="0">下注清0</option>
+                    <option value="banker">做庄家</option>
+                    <option value="start">开始发牌</option>
+                </select>
+                <span class='input-group-btn'>
+                    <input class='input-sm btn btn-default' type='submit' value='执行'>
+                </span>
     </div>
+    </form>
+    <br>
+    <div class='well chatbox' id='play_history'>
+        <ul class='list-unstyled'>
+            <li ng-repeat='m in ctrlmessages'>
+                <i class='fa fa-comment'></i> &nbsp;
+                <b>{{m.from}} </b>: &nbsp; {{m.message}}
+            </li>
+        </ul>
+    </div>
+</div>
 
-  <div class="col-md-2">
-    <small class="marker">Score</small>
-    <ul class="list-unstyled">
-      <li ng-repeat='username in likes track by $index'>
-        <span class='label btn-mini label-default userlabel' >
-          <i class='fa fa-thumbs-o-up'></i>
-          {{username}}
-         </span>
-         <small class="text-primary">&nbsp; sent like</small>
-      </li>
-    </ul>
-  </div>
-
-  <div class="col-md-8">
+<div class="col-md-6">
     <form ng-submit='sendMessage()'>
-      <div class='input-group'>
-        <input class='input-sm form-control'
-                    ng-model='message'
-                    type='text'
-                    placeholder="Type a message...">
-        <span class='input-group-btn'>
-          <input class='input-sm btn btn-default'
-          type='submit'
-          value='Send'>
-        </span>
-      </div>
+        <div class='input-group'>
+            <input class='input-sm form-control' ng-model='message' type='text' placeholder="输入消息……">
+            <span class='input-group-btn'>
+                        <input class='input-sm btn btn-default' type='submit' value='发送'>
+                </span>
+        </div>
     </form>
     <br>
     <div class='well chatbox' id='chat_history'>
-      <ul class='list-unstyled'>
-        <li ng-repeat='m in messages'>
-          <i class='fa fa-comment'></i>
-          &nbsp;
-          <b>{{m.from}} </b>:
-          &nbsp;
-          {{m.message}}
-        </li>
-      </ul>
+        <ul class='list-unstyled'>
+            <li ng-repeat='m in messages'>
+                <i class='fa fa-comment'></i> &nbsp;
+                <b>{{m.from}} </b>: &nbsp; {{m.message}}
+            </li>
+        </ul>
     </div>
-  </div>
 </div>
-
-
+</div>
