@@ -41,6 +41,19 @@
 
         socket.on('all-users', function(data) {
             $scope.users = data;
+            $scope.role = "nobanker";
+
+            var len=data.length;
+            for (var i=0; i<len; i++) {
+                if (data[i].role == "庄家") {
+                    if (data[i].nickname == nickname) {
+                        $scope.role = "banker";
+                    } else {
+                        $scope.role = "player"
+                    }
+                    break;
+                }
+            }
         });
 
         socket.on('message-received', function(data) {

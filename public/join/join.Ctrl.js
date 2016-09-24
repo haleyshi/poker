@@ -13,6 +13,7 @@
 
     $scope.join = function() {
       nickname = $scope.name;
+      nickname = nickname.replace(/^\s+|\s+$/g, ""); // remove left and right spaces
       $localStorage.nickname = nickname;
 
       socket.emit('join', {

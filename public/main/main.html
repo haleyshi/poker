@@ -6,7 +6,8 @@
                 <tr>
                     <th><span class="glyphicon glyphicon-user">&nbsp;昵称</span></th>
                     <th><span class="glyphicon glyphicon-star">&nbsp;战绩</th>
-                    <th><span class="glyphicon glyphicon-heart">&nbsp;状态</th>
+                    <th><span class="glyphicon glyphicon-tower">&nbsp;身份</th>
+                    <th><span class="glyphicon glyphicon-ok">&nbsp;状态</th>
                     <th><span class="glyphicon glyphicon-euro">&nbsp;下注</span></th>
                     <th><span class="glyphicon glyphicon-tags">&nbsp;卡牌</th>
                 </tr>
@@ -15,6 +16,7 @@
                 <tr ng-repeat="user in users | orderBy:-score">
                     <td>{{user.nickname}}</td>
                     <td>{{user.score}}</td>
+                    <td>{{user.role}}</td>
                     <td>{{user.status}}</td>
                     <td>{{user.stake}}</td>
                     <td>{{user.cards}}</td>
@@ -29,13 +31,16 @@
         <form ng-submit='sendCtrlMessage()'>
             <div class='input-group'>
                 <select class="input-sm form-control" ng-model="ctrlmessage" placeholder="选择操作……">
-                    <option value="1">下注+1</option>
-                    <option value="2">下注+2</option>
-                    <option value="5">下注+5</option>
-                    <option value="10">下注+10</option>
-                    <option value="0">下注清0</option>
-                    <option value="banker">做庄家</option>
-                    <option value="start">开始发牌</option>
+                    <option value="1" ng-show="role=='player'">下注+1</option>
+                    <option value="2" ng-show="role=='player'">下注+2</option>
+                    <option value="5" ng-show="role=='player'">下注+5</option>
+                    <option value="10" ng-show="role=='player'">下注+10</option>
+                    <option value="0" ng-show="role=='player'">下注清0</option>
+                    <option value="ready" ng-show="role=='player'">买定离手</option>
+                    <option value="banker" ng-show="role=='nobanker'">庄家开局</option>
+                    <option value="prestart" ng-show="role=='banker'">即将发牌</option>                   
+                    <option value="start" ng-show="role=='banker'">开始发牌</option>
+                    <option value="nobanker" ng-show="role=='banker'">停止坐庄</option>
                 </select>
                 <span class='input-group-btn'>
                     <input class='input-sm btn btn-default' type='submit' value='执行'>
