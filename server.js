@@ -142,6 +142,30 @@ io.on('connection', function(socket) {
                 }
                 break;
             case "start":
+                data.message = "开始发牌";
+                for (x in users) {
+                    if (users[x].nickname == socket.nickname) {  // data.from
+                        users[x].status = "已发牌";
+                    } else {
+                        if (users[x].stake > 0) {
+                            users[x].status = "已发牌";
+                        }
+                    }
+                }
+                break;
+            case "end":
+                data.message = "上一局已经结束";
+                for (x in users) {
+                    if (users[x].nickname == socket.nickname) {  // data.from
+                        users[x].status = "等待中";
+                        users[x].cards = [0, 0, 0, 0, 0]
+                    } else {
+                        users[x].status = "未下注";
+                        users[x].role = "观众";
+                        users[x].stake = 0;
+                        users[x].cards = [0, 0, 0, 0, 0]
+                    }
+                }
                 break;
             default:
                 console.log("Received wrong control message (" + data.message + ") from " + data.from);

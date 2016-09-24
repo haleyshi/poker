@@ -47,10 +47,19 @@
             for (var i=0; i<len; i++) {
                 if (data[i].role == "庄家") {
                     if (data[i].nickname == nickname) {
-                        $scope.role = "banker";
+                        if (data[i].status == "已发牌") {
+                            $scope.role = "bankerfrozen";
+                        } else {
+                            $scope.role = "banker";
+                        }
                     } else {
-                        $scope.role = "player"
+                        if (data[i].status == "已发牌") {
+                            $scope.role = "playerfrozen";
+                        } else {
+                            $scope.role = "player";
+                        }  
                     }
+
                     break;
                 }
             }
