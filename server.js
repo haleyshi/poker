@@ -8,13 +8,14 @@ var port = 8080;
 var users = [];
 
 var allCards = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-                    14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
-                    27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-                    40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52];
+    14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+    27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+    40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52
+];
 var cardsNumber = 52;
 
 function shuffle() {
-    for (var i=0; i<cardsNumber; i++) {
+    for (var i = 0; i < cardsNumber; i++) {
         var r1 = (Math.round(Math.random() * cardsNumber) + 1) % cardsNumber;
         var r2 = (Math.round(Math.random() * cardsNumber) + 1) % cardsNumber;
 
@@ -28,10 +29,10 @@ function shuffle() {
 
 function describeCard(card) {
     var color = Math.floor((card - 1) / 13);
-    var number = (card - 1 ) % 13 + 1;
+    var number = (card - 1) % 13 + 1;
     var desc = "";
     console.log(card + " " + color + " " + number)
-    switch(color) {
+    switch (color) {
         case 0:
             desc += "♦️";
             break;
@@ -48,7 +49,7 @@ function describeCard(card) {
             desc += "ERR";
     }
 
-    switch(number) {
+    switch (number) {
         case 11:
             desc += "J";
             break;
@@ -78,7 +79,7 @@ io.on('connection', function(socket) {
     // When new socket joins
     socket.on('join', function(data) {
         socket.nickname = data.nickname;
-        
+
         var userObj = {
             nickname: data.nickname,
             socketid: socket.id,
@@ -113,68 +114,68 @@ io.on('connection', function(socket) {
     socket.on('send-ctrlmessage', function(data) {
         // socket.broadcast.emit('message-received', data);
 
-        switch(data.message) {
+        switch (data.message) {
             case "0":
                 for (x in users) {
-                    if (users[x].nickname == socket.nickname) {  // data.from
+                    if (users[x].nickname == socket.nickname) { // data.from
                         users[x].stake = 0;
                         users[x].status = "未下注";
                         users[x].role = "观众";
                         data.message = "我是吃瓜群众";
                         break;
-                    } 
+                    }
                 }
                 break;
             case "1":
                 for (x in users) {
-                    if (users[x].nickname == socket.nickname) {  // data.from
+                    if (users[x].nickname == socket.nickname) { // data.from
                         users[x].stake += 1;
                         users[x].role = "闲家";
                         users[x].status = "下注中";
                         data.message = "本局下注为" + users[x].stake;
                         break;
-                    } 
+                    }
                 }
                 break;
             case "2":
                 for (x in users) {
-                    if (users[x].nickname == socket.nickname) {  // data.from
+                    if (users[x].nickname == socket.nickname) { // data.from
                         users[x].stake += 2;
                         users[x].role = "闲家";
                         users[x].status = "下注中";
                         data.message = "本局下注为" + users[x].stake;
                         break;
-                    } 
+                    }
                 }
                 break;
             case "5":
                 for (x in users) {
-                    if (users[x].nickname == socket.nickname) {  // data.from
+                    if (users[x].nickname == socket.nickname) { // data.from
                         users[x].stake += 5;
                         users[x].role = "闲家";
                         users[x].status = "下注中";
                         data.message = "本局下注为" + users[x].stake;
                         break;
-                    } 
+                    }
                 }
                 break;
             case "10":
                 for (x in users) {
-                    if (users[x].nickname == socket.nickname) {  // data.from
+                    if (users[x].nickname == socket.nickname) { // data.from
                         users[x].stake += 10;
                         users[x].role = "闲家";
                         users[x].status = "下注中";
                         data.message = "本局下注为" + users[x].stake;
                         break;
-                    } 
+                    }
                 }
                 break;
             case "ready":
                 data.message = "买定离手，准备赢钱";
                 for (x in users) {
-                    if (users[x].nickname == socket.nickname) {  // data.from
+                    if (users[x].nickname == socket.nickname) { // data.from
                         users[x].status = "准备好了";
-                    } 
+                    }
                 }
                 break;
             case "banker":
@@ -185,10 +186,10 @@ io.on('connection', function(socket) {
                     users[x].stake = 0;
                     users[x].cards = [0, 0, 0, 0, 0];
                     users[x].cardsDesc = "";
-                    if (users[x].nickname == socket.nickname) {  // data.from
+                    if (users[x].nickname == socket.nickname) { // data.from
                         users[x].role = "庄家";
                         users[x].status = "等待中";
-                    } 
+                    }
                 }
                 break;
             case "nobanker":
@@ -204,9 +205,9 @@ io.on('connection', function(socket) {
             case "prestart":
                 data.message = "准备发牌了，快快买定离手";
                 for (x in users) {
-                    if (users[x].nickname == socket.nickname) {  // data.from
+                    if (users[x].nickname == socket.nickname) { // data.from
                         users[x].status = "准备发牌";
-                    } 
+                    }
                 }
                 break;
             case "start":
@@ -217,6 +218,8 @@ io.on('connection', function(socket) {
                 shuffle();
                 var playerNo = 0;
                 for (x in users) {
+                    users[x].cardsDesc = "";
+                    users[x].cards = [0, 0, 0, 0];
                     if (users[x].role == "观众") {
                         continue;
                     }
@@ -226,10 +229,10 @@ io.on('connection', function(socket) {
                         continue;
                     }
 
-                    for (var i=0; i<5; i++) {
-                        var card = allCards[playerNo*5+i];
+                    for (var i = 0; i < 5; i++) {
+                        var card = allCards[playerNo * 5 + i];
                         users[x].cards[i] = card;
-                        users[x].cardsDesc += ( " " + describeCard(card) + " ");
+                        users[x].cardsDesc += (" " + describeCard(card) + " ");
                     }
 
                     users[x].status = "已发牌";
@@ -245,7 +248,7 @@ io.on('connection', function(socket) {
             case "end":
                 data.message = "上一局已经结束，结果如下：";
                 for (x in users) {
-                    if (users[x].nickname == socket.nickname) {  // data.from
+                    if (users[x].nickname == socket.nickname) { // data.from
                         users[x].status = "等待中";
                         data.message += ("   $$$ 庄家(" + users[x].nickname + ")：" + users[x].cardsDesc);
                         users[x].cards = [0, 0, 0, 0, 0];
