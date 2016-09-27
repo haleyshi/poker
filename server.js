@@ -77,6 +77,18 @@ io.on('connection', function(socket) {
     });
 
     // When new socket joins
+    socket.on('verify-user', function(data) {
+        for (x in users) {
+            if (users[x].nickname == data.nickname) {
+                socket.emit('verify-user-resp', { code: 'FAIL', message: '昵称已经被使用，请修改后再试' });
+                return;
+            }
+        }
+
+        socket.emit('verify-user-resp', { code: 'SUCC', message: '' });
+    });
+
+    // When new socket joins
     socket.on('join', function(data) {
         socket.nickname = data.nickname;
 
