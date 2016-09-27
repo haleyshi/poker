@@ -144,7 +144,7 @@ io.on('connection', function(socket) {
                         users[x].stake += 1;
                         users[x].role = "闲家";
                         users[x].status = "下注中";
-                        data.message = "本局下注为" + users[x].stake;
+                        data.message = "下注结束请选择[买定离手]，修改下注请继续，当前下注为" + users[x].stake;
                         break;
                     }
                 }
@@ -155,7 +155,7 @@ io.on('connection', function(socket) {
                         users[x].stake += 2;
                         users[x].role = "闲家";
                         users[x].status = "下注中";
-                        data.message = "本局下注为" + users[x].stake;
+                        data.message = "下注结束请选择[买定离手]，修改下注请继续，当前下注为" + users[x].stake;
                         break;
                     }
                 }
@@ -166,7 +166,7 @@ io.on('connection', function(socket) {
                         users[x].stake += 5;
                         users[x].role = "闲家";
                         users[x].status = "下注中";
-                        data.message = "本局下注为" + users[x].stake;
+                        data.message = "下注结束请选择[买定离手]，修改下注请继续，当前下注为" + users[x].stake;
                         break;
                     }
                 }
@@ -177,13 +177,13 @@ io.on('connection', function(socket) {
                         users[x].stake += 10;
                         users[x].role = "闲家";
                         users[x].status = "下注中";
-                        data.message = "本局下注为" + users[x].stake;
+                        data.message = "下注结束请选择[买定离手]，修改下注请继续，当前下注为" + users[x].stake;
                         break;
                     }
                 }
                 break;
             case "ready":
-                data.message = "买定离手，准备赢钱";
+                data.message = "买定离手，准备赢钱，下注为" + users[x].stake;
                 for (x in users) {
                     if (users[x].nickname == socket.nickname) { // data.from
                         users[x].status = "准备好了";
@@ -223,11 +223,10 @@ io.on('connection', function(socket) {
                 }
                 break;
             case "start":
-                data.message = "开始发牌";
-                data.timestamp = new Date().getTime();
-                io.emit('ctrlmessage-received', data);
+                data.message = "庄家已发牌，发牌及下注结果如下：";
 
                 shuffle();
+
                 var playerNo = 0;
                 for (x in users) {
                     users[x].cardsDesc = "";
@@ -247,6 +246,8 @@ io.on('connection', function(socket) {
                         users[x].cardsDesc += (" " + describeCard(card) + " ");
                     }
 
+                    data.message += ("----" + users[x].role + "，" + users[x].nickname + "，下注：" + users[x].stake + "，手牌：" + users[x].cardsDesc + "----");
+
                     users[x].status = "已发牌";
 
                     playerNo++;
@@ -255,25 +256,9 @@ io.on('connection', function(socket) {
                 console.log(new Date() + " Round start");
                 console.log(users);
 
-                data.message = "结束发牌，请看牌";
                 break;
             case "end":
-                data.message = "上一局已经结束，结果如下：";
-                for (x in users) {
-                    if (users[x].nickname == socket.nickname) { // data.from
-                        users[x].status = "等待中";
-                        data.message += ("   $$$ 庄家(" + users[x].nickname + ")：" + users[x].cardsDesc);
-                        users[x].cards = [0, 0, 0, 0, 0];
-                        users[x].cardsDesc = "";
-                    } else {
-                        users[x].status = "未下注";
-                        users[x].role = "观众";
-                        data.message += ("   $$$ " + users[x].nickname + "：" + users[x].cardsDesc);
-                        users[x].stake = 0;
-                        users[x].cards = [0, 0, 0, 0, 0];
-                        users[x].cardsDesc = "";
-                    }
-                }
+                data.message = "上一局已经结束，庄家请继续，或选择结束做庄";
                 console.log(new Date() + " Round end");
 
                 break;
